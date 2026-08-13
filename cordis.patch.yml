@@ -1,0 +1,6 @@
+# OMDSH Runtime is an ordinary, headless DSH Bundle. It adds one host-side
+# execution service and leaves discovery, authoring, and presentation to
+# DSH Hub Workshop and its consumers.
+- insert:
+    - id: omdsh-runtime
+      name: '@omdsh/runtime'

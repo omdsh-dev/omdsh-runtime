@@ -1,0 +1,95 @@
+{
+  "name": "@omdsh/runtime",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Lightweight OMDSH Runtime for official Profile composition, candidate generations, recovery, and Workshop integration",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "omdsh": "./dist/cli.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.mjs"
+    },
+    "./manager": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/manager.mjs"
+    },
+    "./profile": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/profile.mjs"
+    },
+    "./policy": {
+      "types": "./dist/policy.d.ts",
+      "default": "./dist/policy.mjs"
+    },
+    "./recover": {
+      "types": "./dist/recover.d.ts",
+      "default": "./dist/recover.mjs"
+    },
+    "./launcher": {
+      "types": "./dist/launcher.d.ts",
+      "default": "./dist/launcher.mjs"
+    },
+    "./storage": {
+      "types": "./dist/storage.d.ts",
+      "default": "./dist/storage.mjs"
+    },
+    "./registry": {
+      "types": "./dist/registry.d.ts",
+      "default": "./dist/registry.mjs"
+    },
+    "./recipes": {
+      "types": "./dist/recipes.d.ts",
+      "default": "./dist/recipes.mjs"
+    },
+    "./management": {
+      "types": "./dist/management.d.ts",
+      "default": "./dist/management.mjs"
+    },
+    "./workshop-bridge": {
+      "types": "./dist/workshop-bridge.d.ts",
+      "default": "./dist/workshop-bridge.mjs"
+    },
+    "./adapters/official-v1": {
+      "types": "./dist/adapters/official-v1.d.ts",
+      "default": "./dist/adapters/official-v1.mjs"
+    },
+    "./adapters/repository-config-v1": {
+      "types": "./dist/adapters/repository-config-v1.d.ts",
+      "default": "./dist/adapters/repository-config-v1.mjs"
+    },
+    "./sdk": {
+      "types": "./dist/sdk.d.ts",
+      "default": "./dist/sdk.mjs"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "scripts": {
+    "check": "node --check dist/cli.mjs && node --check dist/index.mjs && node --check dist/manager.mjs && node --check dist/launcher.mjs && node --check dist/process-environment.mjs && node --check dist/storage.mjs && node --check dist/registry.mjs && node --check dist/recipes.mjs && node --check dist/agent-ecosystem.mjs && node --check dist/management.mjs && node --check dist/workshop-bridge.mjs && node --check dist/adapters/official-v1.mjs && node --check dist/adapters/repository-config-v1.mjs",
+    "test": "npm run check"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

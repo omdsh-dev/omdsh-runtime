@@ -1,0 +1,14 @@
+{
+  "schema": "omdsh-workshop-recipes/v1",
+  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "registry": {
+    "schema": "omdsh-registry/v1",
+    "snapshotId": "sha256:b8d2af52deadeee47172635c6dde633f07cafbff038df4b1c9133efa7ad4e426",
+    "revision": 1786260000000,
+    "origins": [
+      "https://hub.omdsh.dev/registry-v1.json",
+      "https://hub.0.org.cn/registry-v1.json"
+    ]
+  },
+  "recipes": []
+}

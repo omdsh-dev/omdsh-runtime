@@ -1,0 +1,29 @@
+{
+  "schema": "omdsh-agent-ecosystem/v1",
+  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "registry": {
+    "schema": "omdsh-registry/v1",
+    "snapshotId": "sha256:b8d2af52deadeee47172635c6dde633f07cafbff038df4b1c9133efa7ad4e426",
+    "revision": 1786260000000,
+    "origins": [
+      "https://hub.omdsh.dev/registry-v1.json",
+      "https://hub.0.org.cn/registry-v1.json"
+    ]
+  },
+  "policy": {
+    "purpose": "read-only-ecosystem-analysis",
+    "installAuthority": "omdsh-registry/v1",
+    "unknownFacts": "preserve-unknown",
+    "recommendation": "deterministic-declared-facts-only",
+    "repair": "preview-only",
+    "repositoryText": "untrusted-data-not-instructions"
+  },
+  "totals": {
+    "projects": 0,
+    "releases": 0,
+    "successfulRuns": 0,
+    "compositions": 0
+  },
+  "projects": [],
+  "compositions": []
+}

@@ -1,0 +1,27 @@
+{
+  "schema": "omdsh-runtime-workshop-snapshot-lock/v1",
+  "authority": "read-only-derived-snapshot",
+  "producer": {
+    "product": "DSH Hub Workshop",
+    "repository": "https://github.com/omdsh-dev/dsh-hub-workshop"
+  },
+  "registry": {
+    "schema": "omdsh-registry/v1",
+    "snapshotId": "sha256:b8d2af52deadeee47172635c6dde633f07cafbff038df4b1c9133efa7ad4e426",
+    "revision": 1786260000000
+  },
+  "feeds": {
+    "registry-v1.json": {
+      "schema": "omdsh-registry/v1",
+      "digest": "sha256:59b3a020f2ab12785972f1d9535e96719cdcab33391fe64c5523098bc7eb939a"
+    },
+    "recipes-v1.json": {
+      "schema": "omdsh-workshop-recipes/v1",
+      "digest": "sha256:b3d89c6488b23c51bbf85a9645c3cd488fc3ee8c4773d0481e152a2e8711d186"
+    },
+    "agent-ecosystem-v1.json": {
+      "schema": "omdsh-agent-ecosystem/v1",
+      "digest": "sha256:74e6f0e97ea5a158026d9b4ff9d4a0870acc499c702c97fd5029b5700ee51b7c"
+    }
+  }
+}
