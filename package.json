@@ -1,8 +1,8 @@
 {
   "name": "@omdsh/runtime",
-  "version": "0.0.0",
+  "version": "0.1.0-preview.1",
   "private": true,
-  "description": "Lightweight OMDSH Runtime for official Profile composition, candidate generations, recovery, and Workshop integration",
+  "description": "Lightweight OMDSH Runtime and Profile Pack toolkit for auditable DSH composition, signing, candidate installs, and rollback",
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -54,6 +54,22 @@
       "types": "./dist/workshop-bridge.d.ts",
       "default": "./dist/workshop-bridge.mjs"
     },
+    "./profile-pack": {
+      "types": "./dist/profile-pack.d.ts",
+      "default": "./dist/profile-pack.mjs"
+    },
+    "./license": {
+      "types": "./dist/license.d.ts",
+      "default": "./dist/license.mjs"
+    },
+    "./pack-authoring": {
+      "types": "./dist/pack-authoring.d.ts",
+      "default": "./dist/pack-authoring.mjs"
+    },
+    "./pack-instances": {
+      "types": "./dist/pack-instances.d.ts",
+      "default": "./dist/pack-instances.mjs"
+    },
     "./adapters/official-v1": {
       "types": "./dist/adapters/official-v1.d.ts",
       "default": "./dist/adapters/official-v1.mjs"
@@ -80,8 +96,8 @@
     "typescript": "5.9.3"
   },
   "scripts": {
-    "check": "node --check dist/cli.mjs && node --check dist/index.mjs && node --check dist/manager.mjs && node --check dist/launcher.mjs && node --check dist/process-environment.mjs && node --check dist/storage.mjs && node --check dist/registry.mjs && node --check dist/recipes.mjs && node --check dist/agent-ecosystem.mjs && node --check dist/management.mjs && node --check dist/workshop-bridge.mjs && node --check dist/adapters/official-v1.mjs && node --check dist/adapters/repository-config-v1.mjs",
-    "test": "npm run check"
+    "check": "node --check dist/cli.mjs && node --check dist/index.mjs && node --check dist/manager.mjs && node --check dist/launcher.mjs && node --check dist/process-environment.mjs && node --check dist/storage.mjs && node --check dist/registry.mjs && node --check dist/recipes.mjs && node --check dist/agent-ecosystem.mjs && node --check dist/management.mjs && node --check dist/workshop-bridge.mjs && node --check dist/profile-pack.mjs && node --check dist/pack-instances.mjs && node --check dist/license.mjs && node --check dist/pack-authoring.mjs && node --check dist/adapters/official-v1.mjs && node --check dist/adapters/repository-config-v1.mjs",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=22"

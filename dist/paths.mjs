@@ -20,6 +20,10 @@ export function profilesDirectory(home) {
   return join(resolveDshHome(home), 'profiles')
 }
 
+export function agentPresetsDirectory(home) {
+  return join(resolveDshHome(home), '.agent-presets')
+}
+
 export function profileDirectory(home, name) {
   return join(profilesDirectory(home), assertProfileName(name))
 }
@@ -31,4 +35,3 @@ export function managerDirectory(home) {
 export function stateFilename(home) {
   return join(managerDirectory(home), STATE_FILENAME)
 }
-
