@@ -84,6 +84,15 @@ export class ExtensionManager {
   stageMarketRecipe(items: Array<{ id: string; releaseId: string; enabled: boolean }>, options?: {
     profile?: string
     recipeId?: string
+    reconcileRegistryManaged?: boolean
+    sourceItems?: Array<{
+      id: string
+      releaseId: string
+      enabled: boolean
+      install: { mode: 'profile-bundle'; packageName: string; spec: string }
+    }>
+    reconcileSourceItems?: Array<{ packageName: string; spec: string }>
+    allowNoChanges?: boolean
   }): Promise<ExtensionStatus>
   stageUpdate(options: {
     profile?: string
@@ -118,5 +127,9 @@ export * from './registry.js'
 export * from './recipes.js'
 export * from './management.js'
 export * from './workshop-bridge.js'
+export * from './profile-pack.js'
+export * from './license.js'
+export * from './pack-authoring.js'
+export * from './pack-instances.js'
 export * from './adapters/repository-config-v1.js'
 export * from './adapters/official-v1.js'

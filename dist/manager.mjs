@@ -13,6 +13,8 @@ import {
 import { observeOfficialPackageOfficialV1, probeOfficialCapabilitiesOfficialV1 } from './adapters/official-v1.mjs'
 import { redactDiagnostic, withoutPackageCredentials } from './process-environment.mjs'
 
+const FIXED_GITHUB_SPEC_RE = /^github:[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+#[0-9a-f]{40}$/
+
 function defaultRunner(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
@@ -259,13 +261,19 @@ export class ExtensionManager {
 
   async stageMarketRecipe(items, options = {}) {
     if (this.registry === undefined) throw new Error('Registry is unavailable')
-    if (!Array.isArray(items) || items.length === 0) throw new Error('Recipe requires at least one item')
-    if (new Set(items.map(item => item.id)).size !== items.length) throw new Error('Recipe contains duplicate projects')
+    const sourceItems = options.sourceItems ?? []
+    if (!Array.isArray(items) || !Array.isArray(sourceItems)
+      || (items.length === 0 && sourceItems.length === 0 && options.reconcileRegistryManaged !== true)) {
+      throw new Error('Recipe requires at least one item')
+    }
+    const componentIds = [...items.map(item => item.id), ...sourceItems.map(item => item.id)]
+    if (new Set(componentIds).size !== componentIds.length) throw new Error('Recipe contains duplicate components')
     const profile = options.profile ?? 'web'
     const selected = await this.resolve(profile)
-    const [current, currentRepositories] = await Promise.all([
+    const [current, currentRepositories, selectedRegistry] = await Promise.all([
       readProfile(this.home, selected),
       readRepositorySpecs(this.home, selected),
+      this.registry.current(),
     ])
     const resolved = []
     for (const item of items) {
@@ -279,6 +287,20 @@ export class ExtensionManager {
       }
       resolved.push({ ...item, action })
     }
+    for (const item of sourceItems) {
+      if (typeof item.enabled !== 'boolean') throw new Error(`Fixed-source item ${JSON.stringify(item.id)} needs an enabled intent`)
+      if (item.install?.mode !== 'profile-bundle') throw new Error(`Fixed-source item ${JSON.stringify(item.id)} is not a Profile Bundle`)
+      assertPackageName(item.install.packageName)
+      if (!FIXED_GITHUB_SPEC_RE.test(item.install.spec || '')) {
+        throw new Error(`Fixed-source item ${JSON.stringify(item.id)} must use a full GitHub commit`)
+      }
+      resolved.push({
+        id: item.id,
+        releaseId: item.releaseId,
+        enabled: item.enabled,
+        action: { id: item.id, releaseId: item.releaseId, install: structuredClone(item.install), authority: 'fixed-source' },
+      })
+    }
     const packageNames = resolved.flatMap(item => item.action.install.mode === 'profile-bundle'
       ? [item.action.install.packageName]
       : [])
@@ -289,6 +311,28 @@ export class ExtensionManager {
     if (new Set(repositoryIdentities).size !== repositoryIdentities.length) {
       throw new Error('Recipe resolves multiple projects to the same Repository Plugin')
     }
+    const targetPackageNames = new Set(packageNames)
+    const targetRepositoryIdentities = new Set(repositoryIdentities)
+    const registryInstalls = selectedRegistry.document.entries.flatMap((entry) => {
+      const releases = entry.releases ?? []
+      return [entry.install, ...releases.map(release => release.install)].filter(Boolean)
+    })
+    const registryRemovablePackages = options.reconcileRegistryManaged === true
+      ? Object.entries(current.installed).filter(([packageName, spec]) => !targetPackageNames.has(packageName)
+        && registryInstalls.some(install => install.mode === 'profile-bundle'
+          && install.packageName === packageName && install.spec === spec))
+      : []
+    const sourceRemovablePackages = (options.reconcileSourceItems ?? []).filter(item => !targetPackageNames.has(item.packageName)
+      && current.installed[item.packageName] === item.spec).map(item => [item.packageName, item.spec])
+    const removablePackages = [...new Map([...registryRemovablePackages, ...sourceRemovablePackages]
+      .map(item => [item[0], item])).values()]
+    const removableRepositories = options.reconcileRegistryManaged === true
+      ? currentRepositories.filter((spec) => {
+        const identity = repositorySpecIdentity(spec)
+        return !targetRepositoryIdentities.has(identity)
+          && registryInstalls.some(install => install.mode === 'repository-plugin' && install.spec === spec)
+      })
+      : []
     const hasChanges = resolved.some((item) => {
       const install = item.action.install
       if (install.mode === 'profile-bundle') {
@@ -297,9 +341,13 @@ export class ExtensionManager {
       }
       const target = repositorySpecIdentity(install.spec)
       return currentRepositories.find(spec => repositorySpecIdentity(spec) === target) !== install.spec
-    })
-    if (!hasChanges) throw new Error('Recipe already matches the current Profile')
-    if (resolved.some(item => item.action.install.mode === 'repository-plugin')) {
+    }) || removablePackages.length > 0 || removableRepositories.length > 0
+    if (!hasChanges) {
+      if (options.allowNoChanges === true) return this.status(profile)
+      throw new Error('Recipe already matches the current Profile')
+    }
+    if (resolved.some(item => item.action.install.mode === 'repository-plugin')
+      || removableRepositories.length > 0) {
       await this.requireRepositoryPlugin(profile)
     }
 
@@ -353,6 +401,29 @@ export class ExtensionManager {
           releaseId: item.action.releaseId,
           spec: install.spec,
           adapter: install.adapter,
+        })
+      }
+      for (const [packageName, spec] of removablePackages) {
+        await this.runDsh([
+          'plugin', '--profile', candidate.id, '--config.ignore-scripts=true', 'remove', packageName,
+        ])
+        enabled = withBundleEnabled(enabled, packageName, false)
+        operations.push({
+          type: 'recipe-uninstall',
+          recipeId: options.recipeId,
+          packageName,
+          spec,
+          scripts: 'blocked',
+        })
+      }
+      for (const spec of removableRepositories) {
+        const index = repositories.indexOf(spec)
+        if (index !== -1) repositories.splice(index, 1)
+        operations.push({
+          type: 'recipe-repository-remove',
+          recipeId: options.recipeId,
+          spec,
+          adapter: 'official-repository/v1',
         })
       }
       await Promise.all([
