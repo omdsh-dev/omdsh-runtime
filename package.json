@@ -1,13 +1,31 @@
 {
   "name": "@omdsh/runtime",
   "version": "0.1.0-preview.1",
-  "private": true,
   "description": "Lightweight OMDSH Runtime and Profile Pack toolkit for auditable DSH composition, signing, candidate installs, and rollback",
+  "keywords": [
+    "deepseek-harness",
+    "dsh-plugin",
+    "agent-modpack",
+    "profile-pack"
+  ],
+  "homepage": "https://github.com/omdsh-dev/omdsh-runtime#readme",
+  "bugs": {
+    "url": "https://github.com/omdsh-dev/omdsh-runtime/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omdsh-dev/omdsh-runtime.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "preview",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
-    "omdsh": "./dist/cli.mjs"
+    "omdsh": "dist/cli.mjs"
   },
   "exports": {
     ".": {
@@ -97,7 +115,8 @@
   },
   "scripts": {
     "check": "node --check dist/cli.mjs && node --check dist/index.mjs && node --check dist/manager.mjs && node --check dist/launcher.mjs && node --check dist/process-environment.mjs && node --check dist/storage.mjs && node --check dist/registry.mjs && node --check dist/recipes.mjs && node --check dist/agent-ecosystem.mjs && node --check dist/management.mjs && node --check dist/workshop-bridge.mjs && node --check dist/profile-pack.mjs && node --check dist/pack-instances.mjs && node --check dist/license.mjs && node --check dist/pack-authoring.mjs && node --check dist/adapters/official-v1.mjs && node --check dist/adapters/repository-config-v1.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "prepublishOnly": "npm run check && npm test"
   },
   "engines": {
     "node": ">=22"

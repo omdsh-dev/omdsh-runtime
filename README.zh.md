@@ -2,7 +2,7 @@
 
 一个复用官方 Harness Profile、Bundle、Cordis 与包操作的无前端执行层。它只补确定性的 plan/apply、candidate generation、用户确认和 previous generation 恢复，不新增第二套 Loader 或 daemon；DSH Hub Workshop 始终是唯一发现、作者发布、审核与 feed 主数据源。
 
-源码仓库已公开。npm 包仍标记为 private，仅用于防止误发布到 registry；GitHub 源码发布与 npm 发布是两个独立渠道。
+源码仓库已公开。`@omdsh/runtime` 配置为 npm 公开预览包，只使用 `preview` dist-tag，预览版本不会隐式移动 `latest`。
 
 代码边界保持为“一个 Toolkit 仓库、多个稳定模块”：`profile-pack` 只负责格式、内容摘要、签名和组合检查；`pack-authoring` 只负责作者清单；`license` 只负责 SPDX 事实；`pack-instances` 只负责命名实例；CLI 只是调用这些模块和既有 Runtime/官方 DSH 操作的薄层。Hub 不 import Runtime 源码，双方只交换带版本的 JSON Schema、Registry 快照 ID、锁包和签名结果。等第三方确实需要独立依赖时，可以原样发布这些子路径或拆成 `pack-core` 包，不需要改 Pack 格式或 CLI。
 
