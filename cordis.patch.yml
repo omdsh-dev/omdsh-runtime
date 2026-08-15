@@ -3,4 +3,4 @@
 # DSH Hub Workshop and its consumers.
 - insert:
     - id: omdsh-runtime
-      name: '@omdsh/runtime'
+      name: '@ohmydsh/runtime'

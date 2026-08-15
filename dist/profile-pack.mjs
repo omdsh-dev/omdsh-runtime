@@ -29,7 +29,7 @@ const OFFICIAL_PROFILE_PACKAGES = new Set([
   '@deepseek-ai/dsh-base',
   '@deepseek-ai/dsh-web-app',
   '@deepseek-ai/dsh-headless',
-  '@omdsh/runtime',
+  '@ohmydsh/runtime',
   '@omdsh/dsh-hub',
 ])
 const POLICY = Object.freeze({
