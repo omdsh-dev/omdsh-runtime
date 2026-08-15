@@ -2,7 +2,7 @@
 
 A headless execution layer that reuses official Harness Profile, Bundle, Cordis, and package operations. It adds deterministic plan/apply, candidate generations, explicit confirmation, and previous-generation recovery without introducing another Loader or daemon. DSH Hub Workshop remains the only discovery, authoring, review, and feed authority.
 
-The source repository is public. The `@omdsh/runtime` package is configured for public preview releases on npm under the `preview` dist-tag; preview releases never move `latest` implicitly.
+The source repository is public. The `@ohmydsh/runtime` package is configured for public preview releases on npm under the `preview` dist-tag; preview releases never move `latest` implicitly.
 
 The code boundary is one Toolkit repository with stable modules: `profile-pack` owns format, digest, signing, and composition checks; `pack-authoring` owns author manifests; `license` owns SPDX facts; `pack-instances` owns named installations; the CLI is a thin caller over those modules and existing Runtime/official DSH operations. The Hub never imports Runtime source. They exchange only versioned JSON Schemas, Registry snapshot IDs, locked packs, and signature results. These subpaths can later be published or moved into a `pack-core` package without changing the Pack format or CLI.
 

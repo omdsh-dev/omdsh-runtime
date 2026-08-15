@@ -1,5 +1,5 @@
 {
-  "name": "@omdsh/runtime",
+  "name": "@ohmydsh/runtime",
   "version": "0.1.0-preview.1",
   "description": "Lightweight OMDSH Runtime and Profile Pack toolkit for auditable DSH composition, signing, candidate installs, and rollback",
   "keywords": [
